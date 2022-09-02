@@ -1,0 +1,147 @@
+一个Gradle Plugin称为一个Project。其官网地址为：https://docs.gradle.org/current/dsl/org.gradle.api.Project.html#org.gradle.api.Project
+
+【每个Project对应一个build.gradle，不管在Project实现类还是build.gradle都可以获取到Gradle，供开发者与Gradle进行交互。】
+
+Project本质上是一组具有一定顺序的Task集合。当然还有Dependencies来管理该Plugin的依赖库、在构建过程中生命周期回调方法等等。
+
+Android项目的 Project
+一个Android项目可以有多个module组成，Gradle是怎么构建这些module呢？
+
+【
+在根目录下两个.gradle：
+
+一个是settings.gradle称为Settings，用来决定哪些module（或者说Gradle Plugin）可以加入到整个构建过程，即多项目构建；
+
+另外一个是build.gradle称为rootProject，为根项目的build.gradle，用来为根项目下的所有项目配置全局公共的信息。
+】
+
+在每个module下均有一个build.gradle，即每个module也是一个Project。
+
+通过这些build.gradle来对Android项目进行构建。
+
+
+Task
+Task用来实现具体功能，如Android Gradle Plugin中的compileDebugAidl就是一个将.aidl转换成.java的任务。
+Task由一组具有一定顺序的Action组成。可以把Action理解为具有功能的一段代码块，也就是Task执行的具体功能。
+Task在添加到Project时需要设定执行顺序。当然也可以设置在构建过程中是否开启该Task。
+
+Gradle构建生命周期
+
+概述
+Gradle构建项目会经历三个生命周期阶段：初始化阶段、配置阶段、执行阶段。同时Gradle提供对应的生命周期回调方法，可作为hook点供开发者修改构建过程。
+
+生命周期监听
+
+可在.build文件中通过this.gradle.addBuildListener监听整个编译过程，通常该监听过程要放到settings.build中（代码省略，后面会放代码地址）。
+
+当然也可以通过单个生命周期方法（如this.gradle.projectsLoaded）来监听对应的生命周期（代码省略，后面会放代码地址）。
+
+【
+注意：监听事件一定要在该生命周期方法调用之前去调用，否则无法监听该事件（很简单生命周期方法都已经执行完了，才去监听，肯定不会监听到该事件）。
+也就是说定义的插件，如果是在app model 下使用，则无法监听到 project.gradle.beforeProject {} 事件。
+】
+
+
+初始化阶段
+作用：创建Settings对象和所有的Project对象
+构建Android项目就是一个多项目构建过程。在根目录的settings.gradle有多少个module就对应多少个Project参与到构建过程。
+在初始化阶段结束之后，就会构建出Settings的实例对象以及所有module对应的Project实例对象。
+
+ 对应生命周期方法
+（1）完成Settings对象的初始化，就会回调到如下方法：
+this.gradle.settingsEvaluated {
+    Settings settings ->
+        //single settingsEvaluated setting.gradle初始化完成 root project name  = StudyGradleDemo
+        println("single settingsEvaluated setting.gradle初始化完成 root project name  = " + settings.rootProject.name)
+}
+rootProject.name = "StudyGradleDemo"
+settings.rootProject.name返回的就是之前在setting.build配置的rootProject.name = "StudyGradleDemo"。
+
+只有在Settings对象初始化完成，才会得到Settings对象里面的内容。在这方法之前，是无法获得Settings对象里面的内容。
+
+
+（2）完成Project对象的初始化，就会回调到如下方法：
+this.gradle.projectsLoaded {
+    systemPrintln("single projectsLoaded 完成项目构建初始化阶段")
+}
+当然如果设置了this.gradle.addBuildListener 会首先回调到该监听里面的对应方法，然后才回调到上面的两个方法。
+只有当初始化阶段完成之后，才可以输出所有的Project信息，代码如下：
+this.gradle.allprojects {
+    Project it ->
+        systemPrintln("all projects , the project name = " + it.name)
+}
+
+只有在初始化阶段完成之后，才会有Project信息输出。所以在初始化阶段完成之前，是无法获取到Project的信息。
+
+配置阶段
+作用：完成每个Project的配置以及生成Task依赖关系图
+所谓的Task依赖关系图就是在执行阶段按照该Task依赖关系依次执行Task。
+在每个module下的build.gradle里面含有一些闭包形式的信息、Task、定义的方法等内容，在配置阶段就是将这些信息配置到该module对应的Project对象中。
+例如在Android开发中经常用到的android{}就是Android Gradle Plugin用来指定项目编译版本等信息；dependencies{}就是定义了一些module依赖，本地依赖、库依赖或远程依赖……
+
+对应生命周期方法
+Android项目是一个多项目构建的过程，不止一个Project需要配置，
+那么Gradle在构建时候，会依次完成每个Project的配置。
+
+所以每个Project都会有一个构建前和构建后生命周期回调方法，Gradle提供了多种方式来监听每个Project的配置过程：
+
+（第一种）在settings.gradle为this.gradle添加监听事件，代码如下：
+this.gradle.beforeProject {
+    systemPrintln(String.format("%s , before project ", it.name))
+}
+this.gradle.afterProject {
+    systemPrintln(String.format("%s , after project ", it.name))
+}
+
+（第二种）在setting.gradle为初始化阶段之后的每个Project添加监听事件，代码如下：
+this.gradle.allprojects {
+    Project it ->
+        it.beforeEvaluate {
+            systemPrintln(String.format("%s , before Evaluate", it.name))
+        }
+        it.afterEvaluate {
+            systemPrintln(String.format("%s , after Evaluate", it.name))
+        }
+}
+
+（第三种）在module下的build.gradle监听的Project添加监听事件，代码如下：
+this.beforeEvaluate {
+}
+this.afterEvaluate {
+}
+
+第一种和第二种适合对所有的Project添加监听事件，而第三种适合只需要监听该Project，根据需要在合适.gradle中添加监听事件。
+
+每个Project在配置阶段还会生成每个Project的Task依赖关系图，可从中获取到里面的所有Task，代码如下：
+this.gradle.taskGraph.whenReady {
+    gradle.taskGraph.allTasks.each {
+        println("Task each  = " + it.name)
+    }
+}
+注意：一定在this.gradle.taskGraph.whenReady 才能获取到所有Task信息，否则编译报错。
+当所有的Project完成配置之后，就会回调到projectsEvaluated{}。通过Android Studio编译项目，查看输出的日志如下：
+
+
+执行阶段
+ 作用：执行所有的Task任务
+按照Task关系依赖图中的Task顺序，依次执行所有的Task。
+可在settings.gradle中在Task执行之前和执行之后，添加监听事件，代码如下：
+this.gradle.taskGraph.beforeTask {
+    println("Task before  = " + it.name)
+}
+this.gradle.taskGraph.afterTask {
+    println("Task after  = " + it.name)
+}
+
+可以用一个图来概括下Gradle构建项目的三个阶段：
+
+（1）初始化阶段：编译开始，回调buildStarted()；执行根目录的settings.gradle，初始化Settings对象之后，回调settingsEvaluated{}；初始化每个module的Project对象之后，回调projectsLoaded{}，完成初始化阶段；
+
+（2）配置阶段：依次执行每个module下的build.gradle完成每个Project配置，有几个build.gradle就会生成几个Project对象，同时生成Task的依赖关系图。在Project配置阶段前后分别会回调beforeEvaluate{}和afterEvaluate{}。可在gradle.taskGraph.whenReady{}中获取到所有的Task。当配置阶段完成后，会回调到projectsEvaluated{}；
+
+（3）执行阶段：执行所有的Task。在每个Task执行前后分别执行beforeTask{} 和afterTask{}，当所有的Task执行完毕，会回调到buildFinish{}，完成编译。
+
+小提示：如果要对所有的Project监听，通常在settings.gradle中添加监听事件；如果只针对特定的Project监听，通常在该module目录下的build.gradle中添加监听事件。
+
+
+

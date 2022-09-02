@@ -1,0 +1,33 @@
+buildscript {
+    repositories {
+        //plugin的仓库
+        google()
+        mavenCentral()
+        //配置自定义插件的maven依赖
+        //【./ 一层路径 ，../2层目录】
+        maven{
+            url uri('./repo')
+        }
+    }
+
+    dependencies {
+        //plugin的类路径
+        classpath "com.android.tools.build:gradle:4.2.1"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+        //todo 其中classpath组成就是该Plugin上传maven时设置pom文件的相应参数
+        // "groupId:artifactId:version"。
+        classpath "com.wj.gradle.plugins:manifestplugin:1.0.0"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
