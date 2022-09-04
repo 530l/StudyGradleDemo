@@ -6,7 +6,7 @@ plugins {
 exported {
     actionRules = ["android.intent.action.MAIN"]
     enableMainManifest true
-    logOutPath "D:\\andoridstudio\\project2\\StudyGradleDemo\\logOutPath"
+    logOutPath "${getRootDir()}/logOutPath"
 }
 
 android {

@@ -13,7 +13,7 @@ buildscript {
     dependencies {
         //plugin的类路径
         classpath "com.android.tools.build:gradle:4.2.1"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10'
         //todo 其中classpath组成就是该Plugin上传maven时设置pom文件的相应参数
         // "groupId:artifactId:version"。
         classpath "com.wj.gradle.plugins:manifestplugin:1.0.0"

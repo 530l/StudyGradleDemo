@@ -35,3 +35,4 @@ include ':login_model'
 //        println("Task each  = " + it.name)
 //    }
 //}
+include ':groovyplugin'
