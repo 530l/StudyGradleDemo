@@ -87,6 +87,7 @@ class ManifestGroovyProject : Plugin<Project> {
     }
 
 
+    //每一个model都会对应一个AppExtension
     private fun readAppModelVariant(project: Project) {
         val appExtension = project.extensions.getByType(AppExtension::class.java)
         //获取Andorid封装的AppExtension拓展，获取变体
