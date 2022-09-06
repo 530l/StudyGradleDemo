@@ -30,7 +30,7 @@
           "group": "org.jetbrains.kotlin",
           "module": "kotlin-stdlib-jdk8",
           "version": {
-            "requires": "1.6.10"
+            "requires": "1.7.10"
           }
         }
       ],
@@ -38,11 +38,11 @@
         {
           "name": "manifestplugin-1.0.0.jar",
           "url": "manifestplugin-1.0.0.jar",
-          "size": 17179,
-          "sha512": "f741798f94338c998fbd59086ed7f39fbd9baca8c8636c1c1e4e436d2dda8c443f8eb7f135ff8826ad8608a6931cb3682f4912b11a5e2ef30f032ba11467954b",
-          "sha256": "dfeebbc44eb56bb685d71beba61c5e7be02989f62045cb4b8495f06ee1183462",
-          "sha1": "c17187d176098bbb438b793f0bd799b955ea217b",
-          "md5": "cba80eca8be1c82646fa3c2c2cba86b6"
+          "size": 18675,
+          "sha512": "29329f42a8d0e8b58d8e090b0cadb8e740e52020914ca0969cfd8f3bd600a3d0c9073fde0e07437d8b4353a427c0e044607b2e0e18b6825464fb16ddff76814e",
+          "sha256": "4856d2c76b1ab4934f818858ab8c280b2be587df48d214a0db21fd2e6e87ec30",
+          "sha1": "a33ae66689a1dcf84e6aa07431817b3d62f3801d",
+          "md5": "2cb2c34defc4d91f3c0ef3e3620602d9"
         }
       ]
     },
@@ -76,7 +76,7 @@
           "group": "org.jetbrains.kotlin",
           "module": "kotlin-stdlib-jdk8",
           "version": {
-            "requires": "1.6.10"
+            "requires": "1.7.10"
           }
         }
       ],
@@ -84,11 +84,11 @@
         {
           "name": "manifestplugin-1.0.0.jar",
           "url": "manifestplugin-1.0.0.jar",
-          "size": 17179,
-          "sha512": "f741798f94338c998fbd59086ed7f39fbd9baca8c8636c1c1e4e436d2dda8c443f8eb7f135ff8826ad8608a6931cb3682f4912b11a5e2ef30f032ba11467954b",
-          "sha256": "dfeebbc44eb56bb685d71beba61c5e7be02989f62045cb4b8495f06ee1183462",
-          "sha1": "c17187d176098bbb438b793f0bd799b955ea217b",
-          "md5": "cba80eca8be1c82646fa3c2c2cba86b6"
+          "size": 18675,
+          "sha512": "29329f42a8d0e8b58d8e090b0cadb8e740e52020914ca0969cfd8f3bd600a3d0c9073fde0e07437d8b4353a427c0e044607b2e0e18b6825464fb16ddff76814e",
+          "sha256": "4856d2c76b1ab4934f818858ab8c280b2be587df48d214a0db21fd2e6e87ec30",
+          "sha1": "a33ae66689a1dcf84e6aa07431817b3d62f3801d",
+          "md5": "2cb2c34defc4d91f3c0ef3e3620602d9"
         }
       ]
     }

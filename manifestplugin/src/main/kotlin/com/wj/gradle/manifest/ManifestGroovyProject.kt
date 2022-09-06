@@ -3,9 +3,14 @@ package com.wj.gradle.manifest
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.tasks.ProcessApplicationManifest
+import groovy.util.Node
+import groovy.util.NodeList
+import groovy.xml.XmlParser
+import groovy.xml.dom.DOMCategory.attributes
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import java.io.File
 
 class ManifestGroovyProject : Plugin<Project> {
 
@@ -15,6 +20,7 @@ class ManifestGroovyProject : Plugin<Project> {
         private const val EXPORTED_EXT = "exported"
         private const val TASK_NAME = "ManifestExportedTask"
     }
+
 
     @Override
     override fun apply(project: Project) {
@@ -26,17 +32,60 @@ class ManifestGroovyProject : Plugin<Project> {
         val ext = project.properties[EXPORTED_EXT] as ExportedExtension
         readAppModelVariant(project)
         //
-        project.afterEvaluate {
-            println("-----afterEvaluate------")
-            if (ext.logOutPath.isEmpty()) {
-                // logOutPath 日志输出目录，默认 app/build/exported/outManifest.md
-                ext.logOutPath = it.buildDir.absoluteFile.path
-                println("-----afterEvaluate logOutPath------${ext.logOutPath}")
+        project.afterEvaluate { it ->
+//            println("-----afterEvaluate------")
+//            if (ext.logOutPath.isEmpty()) {
+//                // logOutPath 日志输出目录，默认 app/build/exported/outManifest.md
+//                ext.logOutPath = it.buildDir.absoluteFile.path
+//                println("-----afterEvaluate logOutPath------${ext.logOutPath}")
+//            }
+//            println("-----afterEvaluate logOutPath------${ext.logOutPath}")
+//            addMainManifestTask(ext, project)
+
+
+            ///test
+            variantNames.forEach { it1 ->
+                val absName = String.format("process%sMainManifest", it1.capitalize())
+                val t = project.tasks.getByName(absName) as ProcessApplicationManifest
+                val permission1 = "android.permission.REQUEST_INSTALL_PACKAGES"
+                val permission2 = "android.permission.BLUETOOTH_CONNECT"
+
+                t.getManifests().files.forEach {
+                    if (findPermission(it, permission1)) {
+                        println("530@ manifest file：$it has permission $permission1")
+                    }
+                    if (findPermission(it, permission2)) {
+                        println("530@ manifest file：$it has permission $permission2")
+                    }
+                }
             }
-            println("-----afterEvaluate logOutPath------${ext.logOutPath}")
-            addMainManifestTask(ext, project)
         }
     }
+
+
+    private fun findPermission(xmlFile: File, permission: String): Boolean {
+        if (!xmlFile.name.endsWith("xml"))
+            return false
+        val androidManifest = XmlParser().parse(xmlFile)
+        var hasPermission = false
+        androidManifest.nodeList().forEach {
+            if (it.name() == "uses-permission") {
+                it.attributes().forEach { attrItem ->
+                    val permissionName = attrItem.value
+                    if (permissionName == permission) {
+                        hasPermission = true
+                    }
+                }
+            }
+        }
+        return hasPermission
+    }
+
+    private fun Node.nodeList() = (this.value() as NodeList).mapNotNull {
+        // 用于防止某些不标准的写法,如//xx 注释直接写到了manifest里
+        it as? Node
+    }
+
 
     private fun readAppModelVariant(project: Project) {
         val appExtension = project.extensions.getByType(AppExtension::class.java)

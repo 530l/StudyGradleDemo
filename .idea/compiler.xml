@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="1.7">
+    <bytecodeTargetLevel target="1.8">
       <module name="StudyGradleDemo.app" target="11" />
       <module name="StudyGradleDemo.login_model" target="11" />
-      <module name="StudyGradleDemo.manifestplugin" target="1.8" />
-      <module name="StudyGradleDemo.manifestplugin.main" target="1.8" />
-      <module name="StudyGradleDemo.manifestplugin.test" target="1.8" />
+      <module name="StudyGradleDemo.share_model" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

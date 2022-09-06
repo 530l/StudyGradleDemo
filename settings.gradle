@@ -2,37 +2,4 @@ rootProject.name = "StudyGradleDemo"
 include ':app'
 include ':manifestplugin'
 include ':login_model'
-
-//1
-//this.gradle.settingsEvaluated {
-//    Settings settings ->
-//        println("single settingsEvaluated setting.gradle初始化完成 root project name  = " + settings.rootProject.name)
-//}
-//
-////2
-//this.gradle.allprojects {
-//    Project it ->
-//        println("all projects , the project name = " + it.name)
-//}
-//
-////3
-//this.gradle.projectsLoaded {
-//    println("single projectsLoaded 完成项目构建初始化阶段")
-//}
-
-//single settingsEvaluated setting.gradle初始化完成 root project name  = StudyGradleDemo
-//all projects , the project name = StudyGradleDemo
-//all projects , the project name = app
-//all projects , the project name = login_model
-//all projects , the project name = manifestplugin
-//single projectsLoaded 完成项目构建初始化阶段
-//
-//> Configure project :app
-
-
-//this.gradle.taskGraph.whenReady {
-//    gradle.taskGraph.allTasks.each {
-//        println("Task each  = " + it.name)
-//    }
-//}
-include ':groovyplugin'
+include ':share_model'
