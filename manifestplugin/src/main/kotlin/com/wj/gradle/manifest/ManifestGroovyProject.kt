@@ -17,6 +17,7 @@ class ManifestGroovyProject : Plugin<Project> {
     private val variantNames = ArrayList<String>()
 
     companion object {
+
         private const val EXPORTED_EXT = "exported"
         private const val TASK_NAME = "ManifestExportedTask"
     }
@@ -33,32 +34,32 @@ class ManifestGroovyProject : Plugin<Project> {
         readAppModelVariant(project)
         //
         project.afterEvaluate { it ->
-//            println("-----afterEvaluate------")
-//            if (ext.logOutPath.isEmpty()) {
-//                // logOutPath 日志输出目录，默认 app/build/exported/outManifest.md
-//                ext.logOutPath = it.buildDir.absoluteFile.path
-//                println("-----afterEvaluate logOutPath------${ext.logOutPath}")
-//            }
-//            println("-----afterEvaluate logOutPath------${ext.logOutPath}")
-//            addMainManifestTask(ext, project)
+            println("-----afterEvaluate------")
+            if (ext.logOutPath.isEmpty()) {
+                // logOutPath 日志输出目录，默认 app/build/exported/outManifest.md
+                ext.logOutPath = it.buildDir.absoluteFile.path
+                println("-----afterEvaluate logOutPath------${ext.logOutPath}")
+            }
+            println("-----afterEvaluate logOutPath------${ext.logOutPath}")
+            addMainManifestTask(ext, project)
 
 
             ///test
-            variantNames.forEach { it1 ->
-                val absName = String.format("process%sMainManifest", it1.capitalize())
-                val t = project.tasks.getByName(absName) as ProcessApplicationManifest
-                val permission1 = "android.permission.REQUEST_INSTALL_PACKAGES"
-                val permission2 = "android.permission.BLUETOOTH_CONNECT"
-
-                t.getManifests().files.forEach {
-                    if (findPermission(it, permission1)) {
-                        println("530@ manifest file：$it has permission $permission1")
-                    }
-                    if (findPermission(it, permission2)) {
-                        println("530@ manifest file：$it has permission $permission2")
-                    }
-                }
-            }
+//            variantNames.forEach { it1 ->
+//                val absName = String.format("process%sMainManifest", it1.capitalize())
+//                val t = project.tasks.getByName(absName) as ProcessApplicationManifest
+//                val permission1 = "android.permission.REQUEST_INSTALL_PACKAGES"
+//                val permission2 = "android.permission.BLUETOOTH_CONNECT"
+//
+//                t.getManifests().files.forEach {
+//                    if (findPermission(it, permission1)) {
+//                        println("530@ manifest file：$it has permission $permission1")
+//                    }
+//                    if (findPermission(it, permission2)) {
+//                        println("530@ manifest file：$it has permission $permission2")
+//                    }
+//                }
+//            }
         }
     }
 

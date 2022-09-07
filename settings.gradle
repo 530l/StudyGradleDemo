@@ -1,5 +1,6 @@
 rootProject.name = "StudyGradleDemo"
 include ':app'
-include ':manifestplugin'
+//include ':manifestplugin'
 include ':login_model'
 include ':share_model'
+include ':plugin01'

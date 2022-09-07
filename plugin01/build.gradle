@@ -1,0 +1,35 @@
+apply plugin: 'kotlin'
+apply plugin: 'java-gradle-plugin'
+apply plugin: 'maven-publish'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+//打包上传到本地或者服务器
+group = 'com.lyf.studyPlugin'
+description = '插件'
+version = '1.0.0'
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId = 'plugin01'
+            from components.java
+        }
+    }
+    //插件存储库
+    repositories {
+        maven {
+            url = uri('../repo')
+        }
+    }
+}
+
+
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0"
+    implementation "com.android.tools.build:gradle:4.2.1"
+}
